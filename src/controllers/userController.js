@@ -34,7 +34,6 @@ userController.post("/login", async (req, res, next) => {
   }
 });
 
-// TODO: 세션 로그인 Endpoint 구현
 userController.post("/session-login", async (req, res, next) => {
   const { email, password } = req.body;
   try {

@@ -27,8 +27,8 @@ userController.post("/login", async (req, res, next) => {
       throw error;
     }
     const user = await userService.getUser(email, password);
-    // TODO: 로그인 성공 시 토큰 발급하여 user 정보와 함께 accessToken 을 응답
-    res.json(user);
+    const accessToken = userService.createToken(user);
+    res.json({ ...user, accessToken });
   } catch (error) {
     next(error);
   }

@@ -8,8 +8,8 @@ async function createUser(user) {
   // 4. 회원가입 성공 시 password 제외한 유저 데이터 반환
   // 5. 회원가입 실패 시 error.data 에는 { email: user.email } 형식으로 전달
   // 6. 회원가입 실패 시 error.code 에는 422 코드 전달
-  const existedUser = await userRepository.findByEmail(user.email);
   try {
+    const existedUser = await userRepository.findByEmail(user.email);
     if (existedUser) {
       const error = new Error("User already exists");
       error.code = 422;

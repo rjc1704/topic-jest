@@ -8,9 +8,11 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^5.17.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

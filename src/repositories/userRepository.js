@@ -1,4 +1,4 @@
-import prisma from '../config/prisma.js';
+import prisma from "../config/prisma.js";
 
 async function findById(id) {
   return prisma.user.findUnique({
@@ -49,4 +49,4 @@ export default {
   save,
   update,
   createOrUpdate,
-}
+};

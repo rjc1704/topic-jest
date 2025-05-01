@@ -18,7 +18,6 @@ userController.post("/users", async (req, res, next) => {
   }
 });
 
-// TODO: 로그인 Endpoint 구현
 userController.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -33,5 +32,7 @@ userController.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+// TODO: 세션 로그인 Endpoint 구현
 
 export default userController;

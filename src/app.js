@@ -13,6 +13,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// TODO: session 미들웨어 추가
+
 app.use("", userController);
 app.use("/products", productController);
 app.use("/reviews", reviewController);

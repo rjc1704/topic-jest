@@ -1,4 +1,5 @@
 import userRepository from "../repositories/userRepository.js";
+import bcrypt from "bcrypt";
 
 async function createUser(user) {
   try {
@@ -10,8 +11,11 @@ async function createUser(user) {
       throw error;
     }
 
-    // TODO: bcrypt 를 사용해서 비밀번호를 해싱처리 후 저장 처리하도록 작업 및 수정하세요
-    const createdUser = await userRepository.save({ ...user });
+    const hashedPassword = await hashPassword(user.password);
+    const createdUser = await userRepository.save({
+      ...user,
+      password: hashedPassword,
+    });
     return filterSensitiveUserData(createdUser);
   } catch (error) {
     if (error.code === 422) throw error; // 기존의 중복 체크 에러는 그대로 전달
@@ -21,6 +25,10 @@ async function createUser(user) {
     customError.code = 500;
     throw customError;
   }
+}
+
+function hashPassword(password) {
+  return bcrypt.hash(password, 10);
 }
 
 function filterSensitiveUserData(user) {
@@ -36,7 +44,7 @@ async function getUser(email, password) {
       error.code = 401;
       throw error;
     }
-    verifyPassword(password, user.password);
+    await verifyPassword(password, user.password);
     return filterSensitiveUserData(user);
   } catch (error) {
     if (error.code === 401) throw error;
@@ -46,9 +54,9 @@ async function getUser(email, password) {
   }
 }
 
-function verifyPassword(inputPassword, password) {
-  // TODO: bcrypt 를 사용해서 비밀번호를 해싱처리 후 비교 처리하도록 작업 및 수정하세요
-  const isMatch = inputPassword === password;
+async function verifyPassword(inputPassword, password) {
+  const isMatch = await bcrypt.compare(inputPassword, password);
+  // const isMatch = inputPassword === password;
   if (!isMatch) {
     const error = new Error("비밀번호가 일치하지 않습니다.");
     error.code = 401;

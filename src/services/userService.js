@@ -64,6 +64,14 @@ async function verifyPassword(inputPassword, password) {
   }
 }
 
+async function createToken(user) {
+  // TODO: jwt 토큰 생성 로직 추가
+  // payload 형식 { userId }
+  // secret key 는 process.env.JWT_SECRET 을 사용
+  // 유효 기간은 1시간
+  // 토큰 발급 후 반환
+}
+
 export default {
   createUser,
   getUser,

@@ -34,6 +34,23 @@ function filterSensitiveUserData(user) {
   return rest;
 }
 
+async function getUser(email, password) {
+  try {
+    // TODO: 로그인 로직 구현
+    // 1. 이메일 존재 여부 확인
+    // 2. 이메일 존재 안할 시 401 "존재하지 않는 이메일입니다." 에러메시지로 응답
+    // 3. 이메일 존재 시 비밀번호 일치 여부 확인
+    // 4. 비밀번호 일치 시 200 코드로 응답와 함께 유저 데이터 반환
+    // 5. 비밀번호 일치 안할 시 401 "비밀번호가 일치하지 않습니다." 에러메시지로 응답
+  } catch (error) {
+    if (error.code === 401) throw error;
+    const customError = new Error("데이터베이스 작업 중 오류가 발생했습니다");
+    customError.code = 500;
+    throw customError;
+  }
+}
+
 export default {
   createUser,
+  getUser,
 };

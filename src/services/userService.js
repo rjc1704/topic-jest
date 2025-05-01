@@ -1,13 +1,6 @@
 import userRepository from "../repositories/userRepository.js";
 
 async function createUser(user) {
-  // TODO: 회원가입 로직 구현
-  // 1. 이메일 중복 여부 확인
-  // 2. 이메일 중복 시 422 코드로 응답
-  // 3. 이메일 중복 아니면 회원가입 진행
-  // 4. 회원가입 성공 시 password 제외한 유저 데이터 반환
-  // 5. 회원가입 실패 시 error.data 에는 { email: user.email } 형식으로 전달
-  // 6. 회원가입 실패 시 error.code 에는 422 코드 전달
   try {
     const existedUser = await userRepository.findByEmail(user.email);
     if (existedUser) {
@@ -17,6 +10,7 @@ async function createUser(user) {
       throw error;
     }
 
+    // TODO: bcrypt 를 사용해서 비밀번호를 해싱처리 후 저장 처리하도록 작업 및 수정하세요
     const createdUser = await userRepository.save({ ...user });
     return filterSensitiveUserData(createdUser);
   } catch (error) {
@@ -53,6 +47,7 @@ async function getUser(email, password) {
 }
 
 function verifyPassword(inputPassword, password) {
+  // TODO: bcrypt 를 사용해서 비밀번호를 해싱처리 후 비교 처리하도록 작업 및 수정하세요
   const isMatch = inputPassword === password;
   if (!isMatch) {
     const error = new Error("비밀번호가 일치하지 않습니다.");

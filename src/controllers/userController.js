@@ -34,5 +34,19 @@ userController.post("/login", async (req, res, next) => {
 });
 
 // TODO: 세션 로그인 Endpoint 구현
-
+userController.post("/session-login", async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      const error = new Error("email, password 가 모두 필요합니다.");
+      error.code = 422;
+      throw error;
+    }
+    const user = await userService.getUser(email, password);
+    req.session.userId = user.id;
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
 export default userController;

@@ -1,4 +1,4 @@
-import reviewRepository from '../repositories/reviewRepository.js';
+import reviewRepository from "../repositories/reviewRepository.js";
 
 async function create(review) {
   return reviewRepository.save(review);

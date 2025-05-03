@@ -26,3 +26,10 @@ Content-Type: application/json
   "password": "test"
 }
 
+###
+POST http://localhost:3000/token/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTc0NjI1OTkxMiwiZXhwIjoxNzQ2MjYzNTEyfQ.tVZfPy1E3AL5ozmoq_UB9jGsy5Ty_1c6EvqjUtBJbU4"
+}

@@ -27,6 +27,8 @@ userController.post("/login", async (req, res, next) => {
       throw error;
     }
     const user = await userService.getUser(email, password);
+    // TODO: accessToken 발급할 때 refreshToken 도 발급하세요
+    // 발급한 refreshToken 을 응답에 포함시키세요
     const accessToken = userService.createToken(user);
     res.json({ ...user, accessToken });
   } catch (error) {
@@ -49,4 +51,7 @@ userController.post("/session-login", async (req, res, next) => {
     next(error);
   }
 });
+
+// TODO: 토큰 갱신 Endpoint 를 추가하세요
+
 export default userController;

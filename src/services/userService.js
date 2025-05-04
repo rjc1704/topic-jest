@@ -86,6 +86,8 @@ async function refreshToken(userId, refreshToken) {
     error.code = 401;
     throw error;
   }
+  // TODO: refreshToken 도 새로 발급하고, 리턴값에 포함시키세요.
+  // hint: 객체형태로 반환하세요
   const newAccessToken = createToken(user);
   return newAccessToken;
 }

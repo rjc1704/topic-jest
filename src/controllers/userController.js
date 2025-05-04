@@ -64,10 +64,11 @@ userController.post(
   auth.verifyRefreshToken,
   async (req, res, next) => {
     try {
-      // const authHeader = req.headers["authorization"];
-      // const refreshToken = authHeader.split(" ")[1];
       const refreshToken = req.cookies.refreshToken;
       const { userId } = req.auth;
+      // TODO: 새로 발급받은 refreshToken 을 쿠키에 저장하세요
+      // httpOnly, sameSite, secure 속성 설정하세요
+      // path 는 api URI 경로에서만 쿠키전송되도록 /token/refresh 경로로 설정
       const accessToken = await userService.refreshToken(userId, refreshToken);
       return res.json({ accessToken });
     } catch (error) {

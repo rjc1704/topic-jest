@@ -1,5 +1,6 @@
 import express from "express";
 import userService from "../services/userService.js";
+import auth from "../middlewares/auth.js";
 
 const userController = express.Router();
 
@@ -27,9 +28,15 @@ userController.post("/login", async (req, res, next) => {
       throw error;
     }
     const user = await userService.getUser(email, password);
-    // TODO: accessToken 발급할 때 refreshToken 도 발급하세요
-    // 발급한 refreshToken 을 응답에 포함시키세요
+
     const accessToken = userService.createToken(user);
+    const refreshToken = userService.createToken(user, "refresh");
+    await userService.updateUser(user.id, { refreshToken });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
     res.json({ ...user, accessToken });
   } catch (error) {
     next(error);
@@ -52,6 +59,21 @@ userController.post("/session-login", async (req, res, next) => {
   }
 });
 
-// TODO: 토큰 갱신 Endpoint 를 추가하세요
+userController.post(
+  "/token/refresh",
+  auth.verifyRefreshToken,
+  async (req, res, next) => {
+    try {
+      // const authHeader = req.headers["authorization"];
+      // const refreshToken = authHeader.split(" ")[1];
+      const refreshToken = req.cookies.refreshToken;
+      const { userId } = req.auth;
+      const accessToken = await userService.refreshToken(userId, refreshToken);
+      return res.json({ accessToken });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
 
 export default userController;

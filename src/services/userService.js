@@ -31,9 +31,8 @@ function hashPassword(password) {
   return bcrypt.hash(password, 10);
 }
 
-// TODO: user 데이터에서 refreshToken 도 제외하고 반환하도록 수정하세요
 function filterSensitiveUserData(user) {
-  const { password, ...rest } = user;
+  const { password, refreshToken, ...rest } = user;
   return rest;
 }
 
@@ -64,12 +63,11 @@ async function verifyPassword(inputPassword, password) {
     throw error;
   }
 }
-// TODO: 두 번째 매개변수로 type 을 추가하세요
-// type 이 "refresh" 일 때는 2주, "access" 일 때는 1시간으로 설정
-function createToken(user) {
+
+function createToken(user, type) {
   const payload = { userId: user.id };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: type === "refresh" ? "2w" : "1h",
   });
   return token;
 }
@@ -77,17 +75,19 @@ function createToken(user) {
 // TODO: updateUser 함수를 완성하세요
 async function updateUser(id, data) {
   // userRepository 에서 적절한 함수를 찾아 호출하세요
-  return;
+  const updatedUser = await userRepository.update(id, data);
+  return filterSensitiveUserData(updatedUser);
 }
 
-// TODO: 토큰 갱신 함수를 완성하세요
 async function refreshToken(userId, refreshToken) {
-  // userId 를 통해 데이터베이스에서 사용자 정보를 가져옵니다.
-  // DB 에서 가져온 user 정보가 없거나
-  // 사용자가 전달한 refreshToken 과 DB 에 저장된 refreshToken 이 일치하지 않으면
-  // 401 Unauthorized 에러를 발생시키세요
-  // 위 단계를 모두 통과했으면 새로운 accessToken 을 발급하여 반환하세요
-  return;
+  const user = await userRepository.findById(userId);
+  if (!user || user.refreshToken !== refreshToken) {
+    const error = new Error("Unauthorized");
+    error.code = 401;
+    throw error;
+  }
+  const newAccessToken = createToken(user);
+  return newAccessToken;
 }
 
 export default {

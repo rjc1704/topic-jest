@@ -40,34 +40,27 @@ async function verifySessionLogin(req, res, next) {
   }
 }
 
-// TODO: verifyAccessToken 함수 추가
-// Authorization Header 에 Bearer {token} 형식으로 요청왔을 때 토큰 검증 동작
 const verifyAccessToken = expressjwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
 });
 
-// TODO: verifyReviewAuth 함수 추가
+const verifyRefreshToken = expressjwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
+  getToken: (req) => req.cookies.refreshToken,
+});
 
 async function verifyReviewAuth(req, res, next) {
-  // req.params에서 reviewId를 추출 (id 에 alias 로 reviewId 사용)
   const { id: reviewId } = req.params;
   try {
-    // reviewRepository 에서 적절한 함수를 호출하여 reviewId 에 해당하는 리뷰를 조회
-    // 1. 여기 코드 이어서 작성하세요
     const review = await reviewRepository.getById(reviewId);
-    // 리뷰가 존재하지 않으면 404 에러 발생. error.code 를 404 로 설정
-    // 적절한 에러 메시지 사용
-    // 2. 여기 코드 이어서 작성하세요
     if (!review) {
       const error = new Error("Review not found");
       error.code = 404;
       throw error;
     }
-    // 리뷰의 작성자와 요청자가 일치하지 않으면 403 에러 발생. error.code 를 403 로 설정
-    // 적절한 에러 메시지 사용
-    // 작성자 id 와 요청자 id 가 일치하는지 확인. schema.prisma 에서 작성자 id 컬럼 확인
-    // 3. 여기 코드 이어서 작성하세요
+
     if (review.authorId !== req.auth.userId) {
       const error = new Error("Forbidden");
       error.code = 403;
@@ -85,4 +78,5 @@ export default {
   verifySessionLogin,
   verifyAccessToken,
   verifyReviewAuth,
+  verifyRefreshToken,
 };

@@ -9,6 +9,7 @@ function throwUnauthorizedError() {
   throw error;
 }
 
+// TODO: passport 의 세션 기반 인증 방식으로 변경
 async function verifySessionLogin(req, res, next) {
   // 세션에서 사용자 정보를 읽어옴
   try {

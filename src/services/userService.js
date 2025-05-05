@@ -92,10 +92,23 @@ async function refreshToken(userId, refreshToken) {
   return { newAccessToken, newRefreshToken };
 }
 
+async function getUserById(id) {
+  const user = await userRepository.findById(id);
+
+  if (!user) {
+    const error = new Error("Not Found");
+    error.code = 404;
+    throw error;
+  }
+
+  return filterSensitiveUserData(user);
+}
+
 export default {
   createUser,
   getUser,
   createToken,
   updateUser,
   refreshToken,
+  getUserById,
 };

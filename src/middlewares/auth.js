@@ -1,4 +1,3 @@
-import userRepository from "../repositories/userRepository.js";
 import { expressjwt } from "express-jwt";
 import reviewRepository from "../repositories/reviewRepository.js";
 
@@ -38,7 +37,7 @@ async function verifyReviewAuth(req, res, next) {
       throw error;
     }
 
-    if (review.authorId !== req.auth.userId) {
+    if (review.authorId !== req.user.id) {
       const error = new Error("Forbidden");
       error.code = 403;
       throw error;

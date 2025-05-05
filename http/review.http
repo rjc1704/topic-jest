@@ -20,10 +20,10 @@ Authorization: Bearer {token}
 ### 리뷰 수정
 PUT http://localhost:3000/reviews/2
 Content-Type: application/json
-Authorization: Bearer {token}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTc0NjQ1OTkwMCwiZXhwIjoxNzQ2NDYzNTAwfQ.DMupya1rplCmkALkf9swqpvWqQh-Dzyc2wTrfGC7jDw
 
 {
-  "title": "Updated Review",
+  "title": "Updated 12",
   "description": "Updated description",
   "rating": 4
 }

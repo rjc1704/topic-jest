@@ -1,5 +1,5 @@
 import express from "express";
-
+import passport from "../config/passport.js";
 import reviewService from "../services/reviewService.js";
 import auth from "../middlewares/auth.js";
 const reviewController = express.Router();
@@ -41,7 +41,7 @@ reviewController.get("/", async (req, res, next) => {
 // TODO: 리뷰 작성자만 수정 가능하도록 수정
 reviewController.put(
   "/:id",
-  auth.verifyAccessToken,
+  passport.authenticate("access-token", { session: false }),
   auth.verifyReviewAuth,
   async (req, res, next) => {
     try {

@@ -1,6 +1,7 @@
 import express from "express";
 import userService from "../services/userService.js";
 import auth from "../middlewares/auth.js";
+import passport from "../config/passport.js";
 
 const userController = express.Router();
 
@@ -43,21 +44,15 @@ userController.post("/login", async (req, res, next) => {
   }
 });
 
-userController.post("/session-login", async (req, res, next) => {
-  const { email, password } = req.body;
-  try {
-    if (!email || !password) {
-      const error = new Error("email, password 가 모두 필요합니다.");
-      error.code = 422;
-      throw error;
-    }
-    const user = await userService.getUser(email, password);
-    req.session.userId = user.id;
-    res.json(user);
-  } catch (error) {
-    next(error);
-  }
-});
+// TODO: passport local strategy 를 이용해서 로그인 처리하도록 리팩터링 하세요
+userController.post(
+  "/session-login",
+  auth.validateEmailAndPassword,
+  passport.authenticate("local"),
+  (req, res) => {
+    res.json(req.user);
+  },
+);
 
 userController.post(
   "/token/refresh",

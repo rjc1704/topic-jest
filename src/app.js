@@ -7,13 +7,12 @@ import userController from "./controllers/userController.js";
 import productController from "./controllers/productController.js";
 import reviewController from "./controllers/reviewController.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import passport from "./config/passport.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
-// TODO: passport 초기화 및 session 설정 추가
 
 app.use(
   session({
@@ -22,6 +21,10 @@ app.use(
     saveUninitialized: false,
   }),
 );
+
+// TODO: passport 초기화 및 session 설정 추가
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("", userController);
 app.use("/products", productController);

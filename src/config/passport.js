@@ -1,7 +1,7 @@
 import passport from "passport";
-import localStrategy from "../middlewares/localStrategy.js";
+import localStrategy from "../middlewares/passport/localStrategy.js";
 import userRepository from "../repositories/userRepository.js";
-// TODO: localStragegy 를 passport 에 등록하세요
+
 passport.use(localStrategy);
 
 // 세션 저장 시 req.session 에 user.id 값을 할당합니다.

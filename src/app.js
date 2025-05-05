@@ -22,7 +22,6 @@ app.use(
   }),
 );
 
-// TODO: passport 초기화 및 session 설정 추가
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -76,7 +76,7 @@ userController.post(
   },
 );
 
-// TODO:
+// TODO: 구글로그인 성공 시 토큰 발급 처리 하세요
 userController.get(
   "/auth/google/callback",
   passport.authenticate("google"),
@@ -86,5 +86,7 @@ userController.get(
     // 발급된 accessToken 을 클라이언트에 응답합니다. 응답형식: { accessToken: 'accessToken' }
   },
 );
+
+// TODO: GET /auth/google 엔드포인트를 만드세요
 
 export default userController;

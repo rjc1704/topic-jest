@@ -106,10 +106,19 @@ async function getUserById(id) {
 
 // TODO: oauthCreateOrUpdate 함수를 완성하세요
 async function oauthCreateOrUpdate(provider, providerId, email, name) {
-  // userRepository 에서 createOrUpdate 사용해서 해당 유저가 DB 에 없으면 create 하고,
-  // DB 에 해당 유저가 있으면 update 하도록 하세요.
-  // userRepository의 createOrUpdate 함수 실행 시 해당 유저데이터를 리턴합니다.
-  // 민감한 유저 데이터를 제외하고 리턴하세요
+  // email로 먼저 유저를 찾는다. userRepository 에서 적절한 메소드를 찾으세요
+  // userRepository 의 메소드 실행결과는 해당 유저데이터를 리턴합니다.
+  // const existingUser = /** @TODO: 여기에 코드 작성하세요 */
+  // if (existingUser) {
+  // 이미 있으면 provider, providerId, name만 업데이트. userRepository 에서 적절한 메소드를 찾으세요
+  // const updatedUser = /** @TODO: 여기에 코드 작성하세요 */
+  // return filterSensitiveUserData(updatedUser);
+  // }
+  // else {
+  // 없으면 새로 생성. userRepository 에서 적절한 메소드를 찾으세요
+  //   const createdUser = /** @TODO: 여기에 코드 작성하세요 */
+  //   return filterSensitiveUserData(createdUser);
+  // }
 }
 
 export default {

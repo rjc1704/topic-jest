@@ -104,6 +104,14 @@ async function getUserById(id) {
   return filterSensitiveUserData(user);
 }
 
+// TODO: oauthCreateOrUpdate 함수를 완성하세요
+async function oauthCreateOrUpdate(provider, providerId, email, name) {
+  // userRepository 에서 createOrUpdate 사용해서 해당 유저가 DB 에 없으면 create 하고,
+  // DB 에 해당 유저가 있으면 update 하도록 하세요.
+  // userRepository의 createOrUpdate 함수 실행 시 해당 유저데이터를 리턴합니다.
+  // 민감한 유저 데이터를 제외하고 리턴하세요
+}
+
 export default {
   createUser,
   getUser,
@@ -111,4 +119,5 @@ export default {
   updateUser,
   refreshToken,
   getUserById,
+  oauthCreateOrUpdate,
 };

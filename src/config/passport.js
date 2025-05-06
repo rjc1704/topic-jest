@@ -5,9 +5,11 @@ import jwt from "../middlewares/passport/jwtStrategy.js";
 
 passport.use(localStrategy);
 
-// TODO: jwtStrategy 를 access-token 이란 이름으로 passport 에 등록하세요
 passport.use("access-token", jwt.accessTokenStrategy);
 passport.use("refresh-token", jwt.refreshTokenStrategy);
+
+// TODO: googleStrategy 를 등록하세요
+
 // 세션 저장 시 req.session 에 user.id 값을 할당합니다.
 passport.serializeUser((user, done) => {
   done(null, user.id); // req.session.passport.user = user.id

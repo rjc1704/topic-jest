@@ -28,4 +28,12 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3000/token/refresh
-Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTc0NjQ2MDYzMiwiZXhwIjoxNzQ3NjcwMjMyfQ.gmkjzFrMIXDI-iQYgV_G0pcDTR4vFpa01eX29wybOag
+Cookie: refreshToken={token}
+
+###
+GET http://localhost:3000/auth/google
+
+###
+GET http://localhost:3000/auth/google/callback
+
+

@@ -44,7 +44,6 @@ userController.post("/login", async (req, res, next) => {
   }
 });
 
-// TODO: passport local strategy 를 이용해서 로그인 처리하도록 리팩터링 하세요
 userController.post(
   "/session-login",
   auth.validateEmailAndPassword,
@@ -74,6 +73,17 @@ userController.post(
     } catch (error) {
       return next(error);
     }
+  },
+);
+
+// TODO:
+userController.get(
+  "/auth/google/callback",
+  passport.authenticate("google"),
+  (req, res, next) => {
+    // 구글로그인 성공 시 accessToken 과 refreshToken 을 발급합니다.
+    // 발급된 refreshToken 은 쿠키에 저장합니다.
+    // 발급된 accessToken 을 클라이언트에 응답합니다. 응답형식: { accessToken: 'accessToken' }
   },
 );
 

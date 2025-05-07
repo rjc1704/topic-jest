@@ -29,7 +29,9 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     // id를 이용해 사용자 정보를 조회
+
     const user = await userRepository.findById(id);
+
     done(null, user); // req.user = user;
   } catch (error) {
     done(error);

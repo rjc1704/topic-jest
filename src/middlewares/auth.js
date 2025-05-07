@@ -10,10 +10,14 @@ function throwUnauthorizedError() {
 
 // TODO: passport 의 세션 기반 인증 방식으로 변경
 async function verifySessionLogin(req, res, next) {
-  if (!req.isAuthenticated()) {
-    throwUnauthorizedError();
+  try {
+    if (!req.isAuthenticated()) {
+      throwUnauthorizedError();
+    }
+    next();
+  } catch (error) {
+    next(error);
   }
-  next();
 }
 
 const verifyAccessToken = expressjwt({
@@ -57,6 +61,7 @@ function validateEmailAndPassword(req, res, next) {
     error.code = 422;
     throw error;
   }
+  next();
 }
 export default {
   verifySessionLogin,

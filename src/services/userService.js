@@ -72,7 +72,6 @@ function createToken(user, type) {
   return token;
 }
 
-// TODO: updateUser 함수를 완성하세요
 async function updateUser(id, data) {
   // userRepository 에서 적절한 함수를 찾아 호출하세요
   const updatedUser = await userRepository.update(id, data);
@@ -104,23 +103,6 @@ async function getUserById(id) {
   return filterSensitiveUserData(user);
 }
 
-// TODO: oauthCreateOrUpdate 함수를 완성하세요
-async function oauthCreateOrUpdate(provider, providerId, email, name) {
-  // email로 먼저 유저를 찾는다. userRepository 에서 적절한 메소드를 찾으세요
-  // userRepository 의 메소드 실행결과는 해당 유저데이터를 리턴합니다.
-  // const existingUser = /** @TODO: 여기에 코드 작성하세요 */
-  // if (existingUser) {
-  // 이미 있으면 provider, providerId, name만 업데이트. userRepository 에서 적절한 메소드를 찾으세요
-  // const updatedUser = /** @TODO: 여기에 코드 작성하세요 */
-  // return filterSensitiveUserData(updatedUser);
-  // }
-  // else {
-  // 없으면 새로 생성. userRepository 에서 적절한 메소드를 찾으세요
-  //   const createdUser = /** @TODO: 여기에 코드 작성하세요 */
-  //   return filterSensitiveUserData(createdUser);
-  // }
-}
-
 export default {
   createUser,
   getUser,
@@ -128,5 +110,4 @@ export default {
   updateUser,
   refreshToken,
   getUserById,
-  oauthCreateOrUpdate,
 };

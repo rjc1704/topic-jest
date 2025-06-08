@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// TODO: provider, providerId 추가
 model User {
   id           Int      @id @default(autoincrement())
   email        String   @unique

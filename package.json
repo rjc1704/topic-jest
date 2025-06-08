@@ -4,10 +4,11 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "module",
-  "main": "src/index.js",
+  "main": "src/app.ts",
   "scripts": {
-    "dev": "nodemon src/app.js",
+    "dev": "ts-node-dev --respawn src/app.ts",
+    "build": "tsc",
+    "start": "node --enable-source-maps dist/app.js",
     "migrate": "prisma migrate dev",
     "studio": "prisma studio"
   },
@@ -26,6 +27,15 @@
     "prisma": "^5.17.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3",
+    "@types/express-session": "^1.18.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/passport": "^1.0.17",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "nodemon": "^3.1.0",
+    "ts-node-dev": "^2.0.0"
   }
 }

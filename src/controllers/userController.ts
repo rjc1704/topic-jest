@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import userService from "../services/userService";
-import auth from "../middlewares/auth.js";
-import passport from "../config/passport.js";
+import auth from "../middlewares/auth";
+import passport from "../config/passport";
 import { ValidationError } from "../types/errors";
 import { User } from "@prisma/client";
 

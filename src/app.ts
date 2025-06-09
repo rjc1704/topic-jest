@@ -6,8 +6,8 @@ import userController from "./controllers/userController";
 
 import productController from "./controllers/productController";
 import reviewController from "./controllers/reviewController";
-import errorHandler from "./middlewares/errorHandler.js";
-import passport from "./config/passport.js";
+import errorHandler from "./middlewares/errorHandler";
+import passport from "./config/passport";
 
 const app = express();
 

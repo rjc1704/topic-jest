@@ -39,3 +39,10 @@ export class NotFoundError extends AppError {
     this.name = "NotFoundError";
   }
 }
+
+export class ForbiddenError extends AppError {
+  constructor(message: string, data?: any) {
+    super(message, 403, data); // 403은 기본값
+    this.name = "ForbiddenError";
+  }
+}

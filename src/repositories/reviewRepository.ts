@@ -1,5 +1,5 @@
 import { Review } from "@prisma/client";
-import prisma from "../config/prisma.js";
+import prisma from "../config/prisma";
 
 async function save(review: Omit<Review, "id" | "createdAt" | "updatedAt">) {
   const createdReview = await prisma.review.create({

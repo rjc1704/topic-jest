@@ -1,4 +1,4 @@
-import reviewRepository from "../repositories/reviewRepository.js";
+import reviewRepository from "../repositories/reviewRepository";
 import { Review } from "@prisma/client";
 
 async function create(review: Omit<Review, "id" | "createdAt" | "updatedAt">) {

@@ -1,6 +1,7 @@
+import { User } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
-async function findById(id) {
+async function findById(id: User["id"]) {
   return prisma.user.findUnique({
     where: {
       id,
@@ -8,15 +9,15 @@ async function findById(id) {
   });
 }
 
-async function findByEmail(email) {
-  return await prisma.User.findUnique({
+async function findByEmail(email: User["email"]) {
+  return await prisma.user.findUnique({
     where: {
       email,
     },
   });
 }
 
-async function save(user) {
+async function save(user: Pick<User, "email" | "name" | "password">) {
   return prisma.user.create({
     data: {
       email: user.email,
@@ -26,7 +27,10 @@ async function save(user) {
   });
 }
 
-async function update(id, data) {
+async function update(
+  id: User["id"],
+  data: Partial<Omit<User, "id" | "createdAt" | "updatedAt">>,
+) {
   return prisma.user.update({
     where: {
       id,
@@ -35,18 +39,9 @@ async function update(id, data) {
   });
 }
 
-async function createOrUpdate(provider, providerId, email, name) {
-  return prisma.user.upsert({
-    where: { provider, providerId },
-    update: { email, name },
-    create: { provider, providerId, email, name },
-  });
-}
-
 export default {
   findById,
   findByEmail,
   save,
   update,
-  createOrUpdate,
 };

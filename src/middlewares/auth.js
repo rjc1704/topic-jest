@@ -1,5 +1,5 @@
 import { expressjwt } from "express-jwt";
-import reviewRepository from "../repositories/reviewRepository.js";
+import reviewRepository from "../repositories/reviewRepository";
 
 function throwUnauthorizedError() {
   // 인증되지 않은 경우 401 에러를 발생시키는 함수

@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import userService from "../services/userService.js";
+import userService from "../services/userService";
 import auth from "../middlewares/auth.js";
 import passport from "../config/passport.js";
 import { ValidationError } from "../types/errors";
@@ -9,7 +9,11 @@ const userController = express.Router();
 
 userController.post(
   "/users",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{}, {}, Pick<User, "email" | "name" | "password">>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { email, name, password } = req.body;
       if (!email || !name || !password) {
@@ -26,28 +30,37 @@ userController.post(
   },
 );
 
-userController.post("/login", async (req, res, next) => {
-  const { email, password } = req.body;
-  try {
-    if (!email || !password) {
-      const error = new ValidationError("email, password 가 모두 필요합니다.");
-      throw error;
-    }
-    const user = await userService.getUser(email, password);
+userController.post(
+  "/login",
+  async (
+    req: Request<{}, {}, Pick<User, "email" | "password">>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const { email, password } = req.body;
+    try {
+      if (!email || !password) {
+        const error = new ValidationError(
+          "email, password 가 모두 필요합니다.",
+        );
+        throw error;
+      }
+      const user = await userService.getUser(email, password);
 
-    const accessToken = userService.createToken(user);
-    const refreshToken = userService.createToken(user, "refresh");
-    await userService.updateUser(user.id, { refreshToken });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
-    res.json({ ...user, accessToken });
-  } catch (error) {
-    next(error);
-  }
-});
+      const accessToken = userService.createToken(user);
+      const refreshToken = userService.createToken(user, "refresh");
+      await userService.updateUser(user.id, { refreshToken });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+      res.json({ ...user, accessToken });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 userController.post(
   "/session-login",

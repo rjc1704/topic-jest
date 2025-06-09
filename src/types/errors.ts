@@ -25,3 +25,17 @@ export class AuthenticationError extends AppError {
     this.name = "AuthenticationError";
   }
 }
+
+export class ServerError extends AppError {
+  constructor(message: string, data?: any) {
+    super(message, 500, data); // 500은 기본값
+    this.name = "ServerError";
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(message: string, data?: any) {
+    super(message, 404, data); // 404은 기본값
+    this.name = "NotFoundError";
+  }
+}

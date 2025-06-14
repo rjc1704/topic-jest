@@ -2,6 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import auth from "../middlewares/auth";
 import productService from "../services/productService";
 import { Product } from "@prisma/client";
+import { CreateProductDto, GetProductParamsDto } from "../dtos/product.dto";
+import { NotFoundError } from "../types/errors";
 
 const productController = express.Router();
 
@@ -9,7 +11,7 @@ productController.post(
   "/",
   auth.verifySessionLogin,
   async (
-    req: Request<{}, {}, Pick<Product, "name" | "price">>,
+    req: Request<{}, {}, CreateProductDto>,
     res: Response,
     next: NextFunction,
   ) => {
@@ -20,9 +22,14 @@ productController.post(
 
 productController.get(
   "/:id",
-  async (req: Request<{ id: string }>, res: Response) => {
+  async (req: Request<GetProductParamsDto>, res: Response) => {
     const { id } = req.params;
     const product = await productService.getById(+id);
+
+    if (!product) {
+      throw new NotFoundError("Product not found");
+    }
+
     res.json(product);
   },
 );

@@ -4,13 +4,14 @@ import auth from "../middlewares/auth";
 import passport from "../config/passport";
 import { ValidationError } from "../types/errors";
 import { User } from "@prisma/client";
+import { CreateUserDto, LoginUserDto } from "../dtos/user.dto";
 
 const userController = express.Router();
 
 userController.post(
   "/users",
   async (
-    req: Request<{}, {}, Pick<User, "email" | "name" | "password">>,
+    req: Request<{}, {}, CreateUserDto>,
     res: Response,
     next: NextFunction,
   ) => {
@@ -33,7 +34,7 @@ userController.post(
 userController.post(
   "/login",
   async (
-    req: Request<{}, {}, Pick<User, "email" | "password">>,
+    req: Request<{}, {}, LoginUserDto>,
     res: Response,
     next: NextFunction,
   ) => {

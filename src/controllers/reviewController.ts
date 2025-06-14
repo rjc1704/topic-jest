@@ -2,7 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 import passport from "../config/passport";
 import reviewService from "../services/reviewService";
 import auth from "../middlewares/auth";
-import { Review } from "@prisma/client";
+import {
+  CreateReviewDto,
+  GetReviewParamsDto,
+  UpdateReviewDto,
+} from "../dtos/review.dto";
 
 const reviewController = express.Router();
 
@@ -10,7 +14,7 @@ reviewController.post(
   "/",
   auth.verifyAccessToken,
   async (
-    req: Request<{}, {}, Omit<Review, "id" | "createdAt" | "updatedAt">>,
+    req: Request<{}, {}, CreateReviewDto>,
     res: Response,
     next: NextFunction,
   ) => {
@@ -29,7 +33,11 @@ reviewController.post(
 
 reviewController.get(
   "/:id",
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  async (
+    req: Request<GetReviewParamsDto>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     const { id } = req.params;
     try {
       const review = await reviewService.getById(+id);
@@ -56,7 +64,11 @@ reviewController.put(
   "/:id",
   passport.authenticate("access-token", { session: false }),
   auth.verifyReviewAuth,
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  async (
+    req: Request<GetReviewParamsDto, {}, UpdateReviewDto>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const updatedReview = await reviewService.update(
         +req.params.id,
@@ -73,7 +85,11 @@ reviewController.delete(
   "/:id",
   auth.verifyAccessToken,
   auth.verifyReviewAuth,
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  async (
+    req: Request<GetReviewParamsDto>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const deletedReview = await reviewService.deleteById(+req.params.id);
       res.json(deletedReview);

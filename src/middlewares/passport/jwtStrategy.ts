@@ -9,10 +9,10 @@ import { DoneCallback } from "passport";
 
 const accessTokenOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET!,
+  secretOrKey: process.env.JWT_SECRET || "default-secret",
 };
 
-const cookieExtractor = function (req: Request) {
+export const cookieExtractor = function (req: Request) {
   var token = null;
   if (req && req.cookies) {
     token = req.cookies["refreshToken"];
@@ -22,14 +22,14 @@ const cookieExtractor = function (req: Request) {
 
 const refreshTokenOptions = {
   jwtFromRequest: cookieExtractor,
-  secretOrKey: process.env.JWT_SECRET!,
+  secretOrKey: process.env.JWT_SECRET || "default-secret",
 };
 
 type JwtPayload = {
   userId: string;
 };
 
-async function jwtVerify(payload: JwtPayload, done: DoneCallback) {
+export async function jwtVerify(payload: JwtPayload, done: DoneCallback) {
   try {
     const user = await userService.getUserById(+payload.userId);
     if (!user) {
@@ -47,4 +47,6 @@ const refreshTokenStrategy = new JwtStrategy(refreshTokenOptions, jwtVerify);
 export default {
   accessTokenStrategy,
   refreshTokenStrategy,
+  cookieExtractor,
+  jwtVerify,
 };

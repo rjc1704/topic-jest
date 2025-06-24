@@ -8,6 +8,40 @@ import {
   ServerError,
   ValidationError,
 } from "../types/errors";
+
+// 내부 함수들을 먼저 정의
+export function hashPassword(password: NonNullable<User["password"]>) {
+  return bcrypt.hash(password, 10);
+}
+
+export function filterSensitiveUserData(user: User) {
+  const { password, refreshToken, ...rest } = user;
+  return rest;
+}
+
+export async function verifyPassword(
+  inputPassword: NonNullable<User["password"]>,
+  password: NonNullable<User["password"]>,
+) {
+  const isMatch = await bcrypt.compare(inputPassword, password);
+  if (!isMatch) {
+    const error = new AuthenticationError("비밀번호가 일치하지 않습니다.");
+    throw error;
+  }
+}
+
+export function createToken(
+  user: Omit<User, "password" | "refreshToken">,
+  type?: "access" | "refresh",
+) {
+  const payload = { userId: user.id };
+  const token = jwt.sign(payload, process.env.JWT_SECRET!, {
+    expiresIn: type === "refresh" ? "2w" : "1h",
+  });
+  return token;
+}
+
+// 메인 서비스 함수들
 async function createUser(user: Pick<User, "email" | "name" | "password">) {
   try {
     const existedUser = await userRepository.findByEmail(user.email);
@@ -26,24 +60,14 @@ async function createUser(user: Pick<User, "email" | "name" | "password">) {
     return filterSensitiveUserData(createdUser);
   } catch (error) {
     if (error instanceof ValidationError) {
-      throw error; // 기존의 중복 체크 에러는 그대로 전달
+      throw error;
     }
 
-    // Prisma 에러를 애플리케이션에 맞는 형식으로 변환
     const customError = new ServerError(
       "데이터베이스 작업 중 오류가 발생했습니다",
     );
     throw customError;
   }
-}
-
-function hashPassword(password: NonNullable<User["password"]>) {
-  return bcrypt.hash(password, 10);
-}
-
-function filterSensitiveUserData(user: User) {
-  const { password, refreshToken, ...rest } = user;
-  return rest;
 }
 
 async function getUser(
@@ -67,34 +91,10 @@ async function getUser(
   }
 }
 
-async function verifyPassword(
-  inputPassword: NonNullable<User["password"]>,
-  password: NonNullable<User["password"]>,
-) {
-  const isMatch = await bcrypt.compare(inputPassword, password);
-  // const isMatch = inputPassword === password;
-  if (!isMatch) {
-    const error = new AuthenticationError("비밀번호가 일치하지 않습니다.");
-    throw error;
-  }
-}
-
-function createToken(
-  user: Omit<User, "password" | "refreshToken">,
-  type?: "access" | "refresh",
-) {
-  const payload = { userId: user.id };
-  const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: type === "refresh" ? "2w" : "1h",
-  });
-  return token;
-}
-
 async function updateUser(
   id: User["id"],
   data: Partial<Omit<User, "id" | "createdAt" | "updatedAt">>,
 ) {
-  // userRepository 에서 적절한 함수를 찾아 호출하세요
   const updatedUser = await userRepository.update(id, data);
   return filterSensitiveUserData(updatedUser);
 }
@@ -125,11 +125,17 @@ async function getUserById(id: User["id"]) {
   return filterSensitiveUserData(user);
 }
 
-export default {
+// 서비스 객체 생성
+const userService = {
   createUser,
   getUser,
   createToken,
   updateUser,
   refreshToken,
   getUserById,
+  hashPassword,
+  filterSensitiveUserData,
+  verifyPassword,
 };
+
+export default userService;

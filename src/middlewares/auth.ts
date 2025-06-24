@@ -30,12 +30,12 @@ async function verifySessionLogin(
 }
 
 const verifyAccessToken = expressjwt({
-  secret: process.env.JWT_SECRET!,
+  secret: process.env.JWT_SECRET || "default-secret",
   algorithms: ["HS256"],
 });
 
 const verifyRefreshToken = expressjwt({
-  secret: process.env.JWT_SECRET!,
+  secret: process.env.JWT_SECRET || "default-secret",
   algorithms: ["HS256"],
   getToken: (req) => req.cookies.refreshToken,
 });
@@ -78,7 +78,7 @@ function validateEmailAndPassword(
   next: NextFunction,
 ) {
   const { email, password } = req.body;
-  if (!email || !password) {
+  if (!email?.trim() || !password?.trim()) {
     const error = new ValidationError("email, password 가 모두 필요합니다.");
     throw error;
   }

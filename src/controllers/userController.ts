@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import userService from "../services/userService";
-import auth from "../middlewares/auth";
+
 import passport from "../config/passport";
 import { ValidationError } from "../types/errors";
 import { User } from "@prisma/client";
@@ -63,14 +63,14 @@ userController.post(
   },
 );
 
-userController.post(
-  "/session-login",
-  auth.validateEmailAndPassword,
-  passport.authenticate("local"),
-  (req: Request, res: Response) => {
-    res.json(req.user);
-  },
-);
+// userController.post(
+//   "/session-login",
+//   auth.validateEmailAndPassword,
+//   passport.authenticate("local"),
+//   (req: Request, res: Response) => {
+//     res.json(req.user);
+//   },
+// );
 
 userController.post(
   "/token/refresh",

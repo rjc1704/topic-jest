@@ -8,4 +8,9 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
+  collectCoverageFrom: [
+    "src/**/*.{js,ts}",
+    "!src/**/*.test.{js,ts}",
+    "!src/**/*.d.ts",
+  ],
 };
